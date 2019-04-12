@@ -1,15 +1,22 @@
-import React, { useState, useRef } from "react";
+import React, { useState } from "react";
 
 interface User {
   name: string;
   numberOfPokemons?: number;
 }
 
+interface Pokemon {
+  name: string;
+  numberOfAbilites: number;
+  baseExperience: string;
+  imageUrl: string;
+}
+
 const App = (props: User) => {
   const { name: userName, numberOfPokemons } = props;
-  const [error, setError] = useState(false);
-  const [pokemon, setPokemon] = useState();
-  const inputRef = useRef<any>();
+  const [error, setError] = useState<boolean>(false);
+  const [pokemon, setPokemon] = useState<Pokemon>();
+  const [input, setInput] = useState<string>("");
 
   let resultMarkup;
   if (error) {
@@ -26,9 +33,12 @@ const App = (props: User) => {
     );
   }
 
-  const onSearchClick = (): void => {
-    const inputValue = inputRef.current.value;
-    fetch(`https://pokeapi.co/api/v2/pokemon/${inputValue}`).then(res => {
+  const handleInputChange = (e: any): void => {
+    setInput(e.target.value);
+  };
+
+  const onSearchClick = (e: any): void => {
+    fetch(`https://pokeapi.co/api/v2/pokemon/${input}`).then(res => {
       if (res.status !== 200) {
         setError(true);
         return;
@@ -51,7 +61,7 @@ const App = (props: User) => {
         User {userName}{" "}
         {numberOfPokemons && <span>has {numberOfPokemons} pokemons</span>}
       </p>
-      <input type="text" ref={inputRef} />
+      <input type="text" value={input} onChange={handleInputChange} />
       <button onClick={onSearchClick} className="my-button">
         Search
       </button>
