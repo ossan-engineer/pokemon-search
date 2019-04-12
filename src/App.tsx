@@ -1,13 +1,17 @@
 import React, { useState, useRef } from "react";
 
-const App = (props: any) => {
+interface User {
+  name: string;
+  numberOfPokemons?: number;
+}
+
+const App = (props: User) => {
   const { name: userName, numberOfPokemons } = props;
   const [error, setError] = useState(false);
   const [pokemon, setPokemon] = useState();
   const inputRef = useRef<any>();
 
   let resultMarkup;
-
   if (error) {
     resultMarkup = <p>Pokemon not found, please try again</p>;
   } else if (pokemon) {
@@ -39,9 +43,6 @@ const App = (props: any) => {
         });
       });
     });
-  };
-  const addNumbers = (a: number, b: number): number => {
-    return a + b;
   };
 
   return (
